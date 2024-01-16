@@ -1,4 +1,4 @@
-package org.enemydave.movieparser;
+package org.enemydave.videoparser;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

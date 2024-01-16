@@ -1,4 +1,4 @@
-package org.enemydave.movieparser;
+package org.enemydave.videoparser;
 
 import java.time.Duration;
 import java.time.LocalTime;
