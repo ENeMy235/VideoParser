@@ -28,9 +28,17 @@ public class GraphicsController implements Initializable {
     @FXML
     private TextArea times;
 
+    File appDir;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Tooltip.install(helpButton, tooltip);
+
+        URL u = GraphicsController.class.getProtectionDomain().getCodeSource().getLocation();
+        appDir = new File(u.getPath()).getParentFile();
+
+        System.out.println(appDir.getAbsolutePath());
+
     }
 
     Tooltip tooltip = new Tooltip("Zadejte časy, kdy se má video zastavit.\nČasy oddělte čárkou. Např. 1:23, 2:34, 3:45");
