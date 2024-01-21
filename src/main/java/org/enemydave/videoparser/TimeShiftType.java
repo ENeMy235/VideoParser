@@ -10,5 +10,7 @@ public enum TimeShiftType {
     AFTER_END,
 
     //+-
-    BEFORE_AND_AFTER_END;
+    BEFORE_AND_AFTER_END,
+
+    BEFORE_AND_AFTER_END_TIMES;
 }

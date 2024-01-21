@@ -1,0 +1,8 @@
+.text-field > .right-button{
+    -fx-background-color: transparent;  /* We must give it a color so that it reacts to the mouse */
+    -fx-translate-x: 12px; /* Move the button 25px to the right */
+}
+
+.text-field:focused {
+    -fx-padding: 0.416667em 18 0.416667em 0.416667em;
+}
