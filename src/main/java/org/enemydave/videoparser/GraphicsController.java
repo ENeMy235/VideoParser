@@ -13,7 +13,9 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -48,8 +50,13 @@ public class GraphicsController implements Initializable {
         Tooltip.install(helpButton, tooltip);
 
         URL u = GraphicsController.class.getProtectionDomain().getCodeSource().getLocation();
+        String path = "";
+        try {
+            path = URLDecoder.decode(u.getPath(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace(); // Handle the exception as needed
+        }
         // Remove %20 from path (space)
-        String path = u.getPath().replaceAll("%20", " ");
         appDir = new File(path).getParentFile();
 
         System.out.println(appDir.getAbsolutePath());
