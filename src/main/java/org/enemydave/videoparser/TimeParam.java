@@ -43,6 +43,10 @@ public class TimeParam {
         this.skip = skip;
         this.order = order;
 
+        if(time.contains(">>")) {
+            time = time.substring(time.indexOf(">>") + 2);
+        }
+
         if (time.startsWith("*")) {
             this.skip = true;
             time = time.substring(1);
@@ -179,8 +183,8 @@ public class TimeParam {
         return pom.format(formatter);
     }
 
-    public String getSaveString(boolean allowSkip) {
-        String skipString = (allowSkip || skip) ? "*" : "";
+    public String getSaveString(boolean forceSkip) {
+        String skipString = (forceSkip || skip) ? "*" : "";
         switch (timeShiftType) {
             case NONE:
                 return String.format("%s%s;%s", skipString, formatTime(startTime), formatTime(endTime));
@@ -206,5 +210,9 @@ public class TimeParam {
 
     public int getOrder() {
         return order;
+    }
+
+    public void setSkip(boolean b) {
+        skip = b;
     }
 }

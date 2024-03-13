@@ -17,6 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class GraphicsController implements Initializable {
@@ -103,6 +104,12 @@ public class GraphicsController implements Initializable {
                      p.getY() + helpButton.getScene().getY() + helpButton.getScene().getWindow().getY() + 15);
     }
 
+    boolean timesChanged = false;
+    public void invertState() {
+        prepareTimes(timesChanged);
+        timesChanged = !timesChanged;
+    }
+
     @FXML
     void importFile(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -132,10 +139,7 @@ public class GraphicsController implements Initializable {
         outputFolder.setText(configuration.outputPath);
 
         if (changeParams) {
-            times.clear();
-            for (TimeParam p : configuration.times) {
-                times.appendText(p.getSaveString(false) + "\n");
-            }
+            fillTextArea(configuration.getTimes());
         }
 
         File movieFile = new File(configuration.moviePath);
@@ -160,9 +164,7 @@ public class GraphicsController implements Initializable {
         if (f != null && f.exists() && f.isDirectory()) {
             fileChooser.setInitialDirectory(f);
         }
-
-
-        fileChooser.setInitialDirectory(f);
+        // fileChooser.setInitialDirectory(f);
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Video Files", "*.mp4", "*.avi", "*.mkv", "*.mov", "*.wmv", "*.flv", "*.webm"),
                 new FileChooser.ExtensionFilter("All Files", "*.*"));
@@ -177,11 +179,7 @@ public class GraphicsController implements Initializable {
         configuration.setMoviePath(ff.getAbsolutePath());
     }
 
-    @FXML
-    void run(ActionEvent event) {
-        console.clear();
-        configuration.setOutputName(output.getText());
-
+    private void prepareTimes(boolean skip) {
         ArrayList<TimeParam> timeParams = configuration.getTimes();
         timeParams.clear();
 
@@ -189,14 +187,28 @@ public class GraphicsController implements Initializable {
 
         for (String time : times.getText().split("\n")) {
             TimeParam timeParam = new TimeParam(time, false, count++);
+            timeParam.setSkip(skip);
             timeParams.add(timeParam);
         }
 
-        times.clear();
+        fillTextArea(timeParams);
+    }
 
-        for (TimeParam timeParam : timeParams) {
-            times.appendText(timeParam.getSaveString(false) + "\n");
+    private void fillTextArea(List<TimeParam> list) {
+        times.clear();
+        int count = 0;
+        for (TimeParam p : list) {
+            times.appendText(String.format("%02d>>%s\n", count++, p.getSaveString(false)));
+            // times.appendText(p.getSaveString(false) + "\n");
         }
+    }
+
+    @FXML
+    void run(ActionEvent event) {
+        console.clear();
+        configuration.setOutputName(output.getText());
+
+        prepareTimes(false);
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Potvrzení časů");

@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.enemydave.videoparser.GraphicsController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.enemydave.videoparser.GraphicsController">
    <center>
       <StackPane BorderPane.alignment="CENTER">
          <children>
@@ -53,6 +53,7 @@
                   <CheckBox fx:id="encode" mnemonicParsing="false" text="Překódovat" GridPane.rowIndex="8" />
                   <CheckBox fx:id="gpuEncode" layoutX="15.0" layoutY="482.0" mnemonicParsing="false" text="GPU" GridPane.columnIndex="2" GridPane.rowIndex="8" />
                   <Button fx:id="consoleOpenButton" mnemonicParsing="false" onAction="#openConsole" text="Konzole" />
+                  <Button mnemonicParsing="false" onAction="#invertState" prefWidth="70.0" style="-fx-font-size: 11;" text="Invertovat" GridPane.rowIndex="6" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -63,7 +64,7 @@
                   <Button fx:id="consoleCloseButton" mnemonicParsing="false" onAction="#closeConsole" text="Close" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0" />
                </children>
             </AnchorPane>
-            <VBox fx:id="progressPane" alignment="CENTER" spacing="50.0" StackPane.alignment="CENTER">
+            <VBox fx:id="progressPane" alignment="CENTER" spacing="50.0" visible="false" StackPane.alignment="CENTER">
                <children>
                   <ProgressBar fx:id="progress" maxWidth="1.7976931348623157E308" progress="0.0" VBox.vgrow="ALWAYS">
                      <VBox.margin>
