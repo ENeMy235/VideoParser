@@ -106,7 +106,7 @@ public class GraphicsController implements Initializable {
 
     boolean timesChanged = false;
     public void invertState() {
-        prepareTimes(timesChanged);
+        prepareTimes(timesChanged, true);
         timesChanged = !timesChanged;
     }
 
@@ -179,7 +179,7 @@ public class GraphicsController implements Initializable {
         configuration.setMoviePath(ff.getAbsolutePath());
     }
 
-    private void prepareTimes(boolean skip) {
+    private void prepareTimes(boolean skip, boolean changeSkip) {
         ArrayList<TimeParam> timeParams = configuration.getTimes();
         timeParams.clear();
 
@@ -187,7 +187,9 @@ public class GraphicsController implements Initializable {
 
         for (String time : times.getText().split("\n")) {
             TimeParam timeParam = new TimeParam(time, false, count++);
-            timeParam.setSkip(skip);
+            if(changeSkip) {
+                timeParam.setSkip(skip);
+            }
             timeParams.add(timeParam);
         }
 
@@ -208,7 +210,7 @@ public class GraphicsController implements Initializable {
         console.clear();
         configuration.setOutputName(output.getText());
 
-        prepareTimes(false);
+        prepareTimes(false, false);
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Potvrzení časů");
