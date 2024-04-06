@@ -11,6 +11,8 @@ public class Configuration {
     String moviePath;
     String outputPath;
     String outputName;
+    String encodingScript;
+    String notEncodingScript;
     boolean useNvenc;
     boolean changeEncoding;
 
@@ -18,16 +20,18 @@ public class Configuration {
     ArrayList<TimeParam> times;
 
     public Configuration() {
-        this("", "", "", new ArrayList<>(), true, true);
+        this("", "", "", new ArrayList<>(), true, true, ProcessCommands.DEFAULT_ENCODING_SCRIPT, ProcessCommands.DEFAULT_NOT_ENCODING_SCRIPT);
     }
 
-    public Configuration(String moviePath, String outputPath, String outputName, ArrayList<TimeParam> times, boolean useNvenc, boolean changeEncoding) {
+    public Configuration(String moviePath, String outputPath, String outputName, ArrayList<TimeParam> times, boolean useNvenc, boolean changeEncoding, String encodingScript, String notEncodingScript) {
         this.moviePath = moviePath;
         this.outputPath = outputPath;
         this.outputName = outputName;
         this.times = times;
         this.useNvenc = useNvenc;
         this.changeEncoding = changeEncoding;
+        this.encodingScript = encodingScript;
+        this.notEncodingScript = notEncodingScript;
     }
 
     public static Configuration getConfigurationFromFile(String path) {
@@ -41,6 +45,8 @@ public class Configuration {
         String outputName = null;
         boolean useNvenc = false;
         boolean changeEncoding = false;
+        String encodingScript = null;
+        String notEncodingScript = null;
         ArrayList<TimeParam> times = new ArrayList<>();
 
         try {
@@ -62,6 +68,10 @@ public class Configuration {
                     useNvenc = Boolean.parseBoolean(line.substring("useNvenc=".length()).trim());
                 } else if (line.startsWith("changeEncoding=")) {
                     changeEncoding = Boolean.parseBoolean(line.substring("changeEncoding=".length()).trim());
+                } else if (line.startsWith("encodingScript=")) {
+                    encodingScript = line.substring("encodingScript=".length());
+                } else if (line.startsWith("notEncodingScript=")) {
+                    notEncodingScript = line.substring("notEncodingScript=".length());
                 }
             }
 
@@ -69,7 +79,7 @@ public class Configuration {
             throw new RuntimeException(e);
         }
 
-        return new Configuration(moviePath, outputPath, outputName, times, useNvenc, changeEncoding);
+        return new Configuration(moviePath, outputPath, outputName, times, useNvenc, changeEncoding, encodingScript, notEncodingScript);
     }
 
     public void saveConfigurationToFile(File file) {
@@ -79,6 +89,8 @@ public class Configuration {
         sb.append("outputName=").append(outputName).append("\n");
         sb.append("useNvenc=").append(useNvenc).append("\n");
         sb.append("changeEncoding=").append(changeEncoding).append("\n");
+        sb.append("encodingScript=").append(encodingScript).append("\n");
+        sb.append("notEncodingScript=").append(notEncodingScript).append("\n");
 
         for (TimeParam time : times) {
             sb.append("times=").append(time.getSaveString(true)).append("\n");
@@ -139,5 +151,21 @@ public class Configuration {
 
     public void setChangeEncoding(boolean changeEncoding) {
         this.changeEncoding = changeEncoding;
+    }
+
+    public String getEncodingScript() {
+        return encodingScript;
+    }
+
+    public void setEncodingScript(String encodingScript) {
+        this.encodingScript = encodingScript;
+    }
+
+    public String getNotEncodingScript() {
+        return notEncodingScript;
+    }
+
+    public void setNotEncodingScript(String notEncodingScript) {
+        this.notEncodingScript = notEncodingScript;
     }
 }

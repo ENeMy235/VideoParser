@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import static org.enemydave.videoparser.ProcessCommands.DEFAULT_ENCODING_SCRIPT;
+import static org.enemydave.videoparser.ProcessCommands.DEFAULT_NOT_ENCODING_SCRIPT;
+
 public class GraphicsController implements Initializable {
 
     @FXML
@@ -63,6 +66,7 @@ public class GraphicsController implements Initializable {
         System.out.println(appDir.getAbsolutePath());
 
 
+
         runButton.disableProperty().bind(Bindings.or(
                 Bindings.isEmpty(movie.textProperty()),
                 Bindings.or(Bindings.isEmpty(times.textProperty()),
@@ -70,6 +74,18 @@ public class GraphicsController implements Initializable {
 
         configuration = new Configuration();
         configuration.setOutputPath(appDir.getAbsolutePath());
+
+        File defaultScript = new File(appDir.getAbsolutePath() + "\\defaultFfmpegScript.txt");
+        if(defaultScript.exists()) {
+            var defaultConfig = Configuration.getConfigurationFromFile(defaultScript.getAbsolutePath());
+            configuration.setEncodingScript(defaultConfig.getEncodingScript());
+            configuration.setNotEncodingScript(defaultConfig.getNotEncodingScript());
+        } else {
+            configuration.setEncodingScript(DEFAULT_ENCODING_SCRIPT);
+            configuration.setNotEncodingScript(DEFAULT_NOT_ENCODING_SCRIPT);
+            configuration.saveConfigurationToFile(defaultScript);
+        }
+
         loadFields(false);
 
         progressPane.setVisible(false);
@@ -225,6 +241,14 @@ public class GraphicsController implements Initializable {
         File f = new File(configuration.getOutputPath() + "\\" + configuration.getOutputName() + "\\export-" + configuration.getOutputName() + ".txt");
         if (!f.getParentFile().exists()) {
             f.getParentFile().mkdirs();
+        }
+
+        if(configuration.getEncodingScript() == null || configuration.getEncodingScript().isEmpty()) {
+            configuration.setEncodingScript(DEFAULT_ENCODING_SCRIPT);
+        }
+
+        if(configuration.getNotEncodingScript() == null || configuration.getNotEncodingScript().isEmpty()) {
+            configuration.setNotEncodingScript(DEFAULT_NOT_ENCODING_SCRIPT);
         }
 
         configuration.saveConfigurationToFile(f);

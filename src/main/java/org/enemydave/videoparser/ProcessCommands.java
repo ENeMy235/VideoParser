@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 public class ProcessCommands {
 
+    static final String DEFAULT_ENCODING_SCRIPT = "ffmpeg -y -i INPUT_VIDEO -ss START_TIME -to END_TIME -map 0:v -map 0:a -c:v VIDEO_ENCODE -c:a aac -b:a 192k -threads 4 OUTPUT_VIDEO";
+    static final String DEFAULT_NOT_ENCODING_SCRIPT = "ffmpeg -y -i INPUT_VIDEO -ss START_TIME -to END_TIME -map 0:v -map 0:a -c:v copy -c:a copy OUTPUT_VIDEO";
 
     static Runtime rt = Runtime.getRuntime();
 
@@ -17,7 +19,8 @@ public class ProcessCommands {
         // ffmpeg -i input_video.mp4 -ss START_TIME -to END_TIME -c:v libx264 -c:a aac -b:a 192k output_clip.mp4
         // ffmpeg -y -i input_video.mp4 -ss START_TIME -to END_TIME -c:v libx264 -c:a aac -strict experimental -b:a 192k -map 0 -c:s copy output_clip.mp4
 
-        // ffmpeg -y -i input_video.mp4 -ss START_TIME -to END_TIME -c:v h264_nvenc -preset fast -b:v 5M -c:a aac -b:a -map 0 192k output_encoded.mp4
+        // ffmpeg -y -i INPUT_VIDEO -ss START_TIME -to END_TIME -c:v VIDEO_ENCODE -preset fast -b:v 5M -c:a aac -b:a -map 0 192k OUTPUT_VIDEO
+        // ffmpeg -y -i INPUT_VIDEO -ss START_TIME -to END_TIME -map 0:a -c:v copy -c:a copy OUTPUT_VIDEO
 
         ArrayList<TimeParam> times = configuration.getTimes().stream().collect(ArrayList::new, (list, item) -> {
             if (!item.isSkip()) list.add(item);
@@ -43,12 +46,21 @@ public class ProcessCommands {
             String cmd;
             if (configuration.changeEncoding) {
                 String gpu = configuration.useNvenc ? "h264_nvenc" : "libx264";
-                cmd = String.format("ffmpeg -i \"%s\" -ss %s -to %s -map 0:v -map 0:a -c:v %s -c:a aac -b:a 192k -threads 4 \"%s\" -y",
-                                    configuration.getMoviePath(), p.getStartTime(), p.getEndTime(), gpu, outputFile);
+                cmd = configuration.getEncodingScript().replace("VIDEO_ENCODE", gpu);
+
+                // cmd = String.format("ffmpeg -i \"%s\" -ss %s -to %s -map 0:v -map 0:a -c:v %s -c:a aac -b:a 192k -threads 4 \"%s\" -y",
+                //                     configuration.getMoviePath(), p.getStartTime(), p.getEndTime(), gpu, outputFile);
             } else {
-                cmd = String.format("ffmpeg -i \"%s\" -ss %s -to %s -map 0:v -map 0:a -c:v copy -c:a copy \"%s\" -y",
-                                    configuration.getMoviePath(), p.getStartTime(), p.getEndTime(), outputFile);
+                cmd = configuration.getNotEncodingScript();
+
+                // cmd = String.format("ffmpeg -i \"%s\" -ss %s -to %s -map 0:v -map 0:a -c:v copy -c:a copy \"%s\" -y",
+                //                     configuration.getMoviePath(), p.getStartTime(), p.getEndTime(), outputFile);
             }
+
+            cmd = cmd.replace("INPUT_VIDEO", "\"" + configuration.getMoviePath() + "\"")
+                    .replace("START_TIME", p.getStartTime())
+                    .replace("END_TIME", p.getEndTime())
+                    .replace("OUTPUT_VIDEO", "\"" + outputFile + "\"");
 
             System.out.println(cmd);
 
