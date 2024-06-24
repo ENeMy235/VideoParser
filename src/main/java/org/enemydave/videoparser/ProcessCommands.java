@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public class ProcessCommands {
 
-    static final String DEFAULT_ENCODING_SCRIPT = "ffmpeg -y -i INPUT_VIDEO -ss START_TIME -to END_TIME -map 0:v -map 0:a -c:v VIDEO_ENCODE -c:a aac -b:a 192k -threads 4 OUTPUT_VIDEO";
-    static final String DEFAULT_NOT_ENCODING_SCRIPT = "ffmpeg -y -i INPUT_VIDEO -ss START_TIME -to END_TIME -map 0:v -map 0:a -c:v copy -c:a copy OUTPUT_VIDEO";
+    static final String DEFAULT_ENCODING_SCRIPT = "ffmpeg -y -i INPUT_VIDEO -pix_fmt yuv420p -ss START_TIME -to END_TIME -map 0:v -c:v VIDEO_ENCODE -map 0:a -c:a aac -ac 2 -threads 4 OUTPUT_VIDEO";
+    static final String DEFAULT_NOT_ENCODING_SCRIPT = "ffmpeg -y -i INPUT_VIDEO -ss START_TIME -to END_TIME -map 0:v -c:v copy -map 0:a -c:a copy OUTPUT_VIDEO";
 
     static Runtime rt = Runtime.getRuntime();
 
