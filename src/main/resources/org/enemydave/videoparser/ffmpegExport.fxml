@@ -40,13 +40,13 @@
                   <TextField fx:id="movie" layoutX="10.0" layoutY="73.0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
                   <Button layoutX="310.0" layoutY="73.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#openMovie" text="Otevřít" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                   <Text layoutX="10.0" layoutY="98.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Video" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM" />
-                  <TextField fx:id="output" GridPane.columnSpan="2147483647" GridPane.rowIndex="3" />
+                  <TextField fx:id="output" GridPane.columnSpan="2" GridPane.rowIndex="3" />
                   <Text layoutX="10.0" layoutY="172.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Název výstupu" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM" />
                   <TextArea fx:id="times" GridPane.columnSpan="2147483647" GridPane.rowIndex="7" GridPane.vgrow="ALWAYS" />
                   <Button fx:id="runButton" mnemonicParsing="false" onAction="#run" text="Spustit" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Časy" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="BOTTOM" />
                   <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#importFile" text="Import" GridPane.columnIndex="2" />
-                  <Button fx:id="helpButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#help" text="Help" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                  <Button fx:id="helpButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#help" text="Help" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                   <Text layoutX="121.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Výstupní složka" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                   <TextField fx:id="outputFolder" GridPane.columnSpan="2" GridPane.rowIndex="5" />
                   <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#changeOutputFolder" text="Změnit" GridPane.columnIndex="2" GridPane.rowIndex="5" />
@@ -54,6 +54,8 @@
                   <CheckBox fx:id="gpuEncode" layoutX="15.0" layoutY="482.0" mnemonicParsing="false" text="GPU" GridPane.columnIndex="2" GridPane.rowIndex="8" />
                   <Button fx:id="consoleOpenButton" mnemonicParsing="false" onAction="#openConsole" text="Konzole" />
                   <Button mnemonicParsing="false" onAction="#invertState" prefWidth="70.0" style="-fx-font-size: 11;" text="Invertovat" GridPane.rowIndex="6" />
+                  <TextField fx:id="playSpeed" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Speed" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="6" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

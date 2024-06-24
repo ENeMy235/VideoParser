@@ -1,7 +1,9 @@
 package org.enemydave.videoparser;
 
+import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,7 +45,7 @@ public class TimeParam {
         this.skip = skip;
         this.order = order;
 
-        if(time.contains(">>")) {
+        if (time.contains(">>")) {
             time = time.substring(time.indexOf(">>") + 2);
         }
 
@@ -214,5 +216,27 @@ public class TimeParam {
 
     public void setSkip(boolean b) {
         skip = b;
+    }
+
+    public void setPlaySpeed(double playSpeed) {
+        if(startTime != null) {
+            startTime = adjustTimeByPlaySpeed(startTime, playSpeed);
+        }
+
+        if(endTime != null) {
+            endTime = adjustTimeByPlaySpeed(endTime, playSpeed);
+        }
+    }
+
+    private LocalTime adjustTimeByPlaySpeed(LocalTime time, double playSpeed) {
+        Duration elapsedRealTime = Duration.between(LocalTime.of(0, 0), time);
+
+        // Scale the elapsed time by the playback speed
+        long scaledSeconds = (long) (elapsedRealTime.getSeconds() * playSpeed);
+
+        long timeDiff = scaledSeconds - elapsedRealTime.getSeconds();
+
+        // Calculate the current play time based on the scaled duration
+        return time.plus(timeDiff, ChronoUnit.SECONDS);
     }
 }

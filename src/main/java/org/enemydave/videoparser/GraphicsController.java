@@ -29,7 +29,7 @@ public class GraphicsController implements Initializable {
     private Button helpButton, runButton, consoleOpenButton, consoleCloseButton;
 
     @FXML
-    private TextField movie, output, outputFolder;
+    private TextField movie, output, outputFolder, playSpeed;
 
     @FXML
     private TextArea times, console;
@@ -199,6 +199,16 @@ public class GraphicsController implements Initializable {
         ArrayList<TimeParam> timeParams = configuration.getTimes();
         timeParams.clear();
 
+        double playSpeed = 1;
+
+        try {
+            String text = this.playSpeed.getText();
+            text = text.replace(",", ".");
+            playSpeed = Double.parseDouble(text);
+        } catch (NumberFormatException e) {
+            playSpeed = 1.0;
+        }
+
         int count = 0;
 
         for (String time : times.getText().split("\n")) {
@@ -207,7 +217,13 @@ public class GraphicsController implements Initializable {
                 timeParam.setSkip(skip);
             }
             timeParams.add(timeParam);
+
+            if(playSpeed != 1) {
+                timeParam.setPlaySpeed(playSpeed);
+            }
         }
+
+        this.playSpeed.setText("1");
 
         fillTextArea(timeParams);
     }
