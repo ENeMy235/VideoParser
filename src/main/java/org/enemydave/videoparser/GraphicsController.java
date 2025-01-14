@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.control.*;
+import javafx.scene.input.Clipboard;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
@@ -99,6 +100,38 @@ public class GraphicsController implements Initializable {
         });
 
         grayPane.visibleProperty().bind(progressPane.visibleProperty());
+
+        MenuItem clear = new MenuItem("Smazat");
+        MenuItem paste = new MenuItem("Vložit ze stopek");
+        MenuItem countTimes = new MenuItem("Formát časů");
+        times.setContextMenu(new ContextMenu(clear, paste, countTimes));
+
+        clear.setOnAction(event -> {
+            times.clear();
+        });
+
+        paste.setOnAction(event -> {
+            String clipboard = Clipboard.getSystemClipboard().getString();
+
+            String [] lines = clipboard.split("\n");
+
+
+            for (String line : lines) {
+                line = line.trim();
+                line = line.replaceAll("\\s+", " ");
+                line = line.split(" ")[1];
+
+                String text = line.substring(0, line.indexOf("."));
+
+                times.appendText(text + "\n");
+            }
+        });
+
+        countTimes.setOnAction(event -> {
+            prepareTimes(false, false, false);
+        });
+
+        playSpeed.setText("1.0");
     }
 
     Tooltip tooltip = new Tooltip("Zadejte časy, kdy se má video zastavit.\n" +
@@ -122,7 +155,7 @@ public class GraphicsController implements Initializable {
 
     boolean timesChanged = false;
     public void invertState() {
-        prepareTimes(timesChanged, true);
+        prepareTimes(timesChanged, true, true);
         timesChanged = !timesChanged;
     }
 
@@ -195,19 +228,24 @@ public class GraphicsController implements Initializable {
         configuration.setMoviePath(ff.getAbsolutePath());
     }
 
-    private void prepareTimes(boolean skip, boolean changeSkip) {
+    private void prepareTimes(boolean skip, boolean changeSkip, boolean changeSpeed) {
         ArrayList<TimeParam> timeParams = configuration.getTimes();
         timeParams.clear();
 
         double playSpeed = 1;
 
-        try {
-            String text = this.playSpeed.getText();
-            text = text.replace(",", ".");
-            playSpeed = Double.parseDouble(text);
-        } catch (NumberFormatException e) {
-            playSpeed = 1.0;
+        if(changeSpeed) {
+            try {
+                String text = this.playSpeed.getText();
+                text = text.replace(",", ".");
+                playSpeed = Double.parseDouble(text);
+            } catch (NumberFormatException e) {
+                playSpeed = 1.0;
+            }
+
+            this.playSpeed.setText("1.0");
         }
+
 
         int count = 0;
 
@@ -222,8 +260,6 @@ public class GraphicsController implements Initializable {
                 timeParam.setPlaySpeed(playSpeed);
             }
         }
-
-        this.playSpeed.setText("1");
 
         fillTextArea(timeParams);
     }
@@ -242,7 +278,7 @@ public class GraphicsController implements Initializable {
         console.clear();
         configuration.setOutputName(output.getText());
 
-        prepareTimes(false, false);
+        prepareTimes(false, false, true);
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Potvrzení časů");
